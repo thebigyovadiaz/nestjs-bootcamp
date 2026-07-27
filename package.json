@@ -1,0 +1,22 @@
+{
+  "name": "nestjs-bootcamp",
+  "version": "1.0.0",
+  "description": "Building application with NestJs",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebigyovadiaz/nestjs-bootcamp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Mozilla Public License",
+  "type": "commonjs",
+  "homepage": "https://github.com/thebigyovadiaz/nestjs-bootcamp#readme"
+}
