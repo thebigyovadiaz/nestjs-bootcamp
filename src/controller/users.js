@@ -4,7 +4,7 @@ const resJSON = require("../utils/response")
 const getUsers = (req, res) => (
     resJSON(res, 200, {
         success: true,
-        message: "Users list",
+        message: "Users fetched successfully",
         data: [
             {
             name: "Peter Rose",
@@ -23,8 +23,7 @@ const getUsers = (req, res) => (
 const newUser = (req, res) => (
     resJSON(res, 201, {
         success: true,
-        message: "User created",
-        data: null
+        message: "User created successfully"
     })
 )
 

@@ -1,10 +1,16 @@
 const http = require("http")
-const { routes, get, post, put, del } = require("./router")
+const { routes, get, post, put, del, use, resolve } = require("./router")
 
 const home = require("../controller/home")
 const routeNotFound = require("../controller/routeNotFound")
 const { getProducts } = require("../controller/products")
 const { getUsers, newUser } = require("../controller/users")
+const logger = require("../middlewares/logger")
+const auth = require("../middlewares/auth")
+
+// Middleware Register
+use(logger)
+use(auth)
 
 // Routes Register
 get("/", home)
@@ -13,14 +19,9 @@ get("/users", getUsers)
 post("/users", newUser)
 
 const server = http.createServer((req, res) => {
-    const key = `${req.method}:${req.url}`
-    const handler = routes[key]
-
-    if (!handler) {
-        return routeNotFound(req, res)
-    }
-
-    return routes[key](req, res)
+    const url = new URL(req.url, `http://${req.headers.host}`)
+    const key = `${req.method}:${url.pathname}`
+    return resolve(key, req, res)
 })
 
 server.listen(3000, () => console.log('Server running in local port 3000'))

@@ -4,7 +4,7 @@ const resJSON = require("../utils/response")
 const getProducts = (req, res) => (
     resJSON(res, 200, {
         success: true,
-        message: "Products list",
+        message: "Products fetched successfully",
         data: [
             {
                 name: "towel",
