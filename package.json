@@ -2,13 +2,14 @@
   "name": "nestjs-bootcamp",
   "version": "1.0.0",
   "description": "Building application with NestJs",
-  "main": "index.js",
+  "main": "dist/app/server.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app/server.js"
+    "build": "tsc",
+    "start": "node dist/app/server.js",
+    "dev": "tsx watch src/app/server.ts"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
   "keywords": [],
   "author": "",
   "license": "Mozilla Public License",
-  "type": "commonjs",
-  "homepage": "https://github.com/thebigyovadiaz/nestjs-bootcamp#readme"
+  "homepage": "https://github.com/thebigyovadiaz/nestjs-bootcamp#readme",
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
 }
