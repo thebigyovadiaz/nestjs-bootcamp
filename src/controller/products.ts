@@ -1,7 +1,7 @@
-const methodAllowed = require("../utils/methodAllowed")
-const resJSON = require("../utils/response")
+import { IncomingMessage, ServerResponse } from 'http';
+import { resJSON } from '../utils/response';
 
-const getProducts = (req, res) => (
+export const getProducts = (req: IncomingMessage, res: ServerResponse): void => (
     resJSON(res, 200, {
         success: true,
         message: "Products fetched successfully",
@@ -19,7 +19,3 @@ const getProducts = (req, res) => (
         ]
     })
 )
-
-module.exports = {
-    getProducts
-}

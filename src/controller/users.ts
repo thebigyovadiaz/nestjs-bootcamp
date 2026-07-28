@@ -1,7 +1,7 @@
-const methodAllowed = require("../utils/methodAllowed")
-const resJSON = require("../utils/response")
+import { IncomingMessage, ServerResponse } from 'http';
+import { resJSON } from '../utils/response';
 
-const getUsers = (req, res) => (
+export const getUsers = (req: IncomingMessage, res: ServerResponse): void => (
     resJSON(res, 200, {
         success: true,
         message: "Users fetched successfully",
@@ -20,14 +20,9 @@ const getUsers = (req, res) => (
     })
 )
 
-const newUser = (req, res) => (
+export const newUser = (req: IncomingMessage, res: ServerResponse): void => (
     resJSON(res, 201, {
         success: true,
         message: "User created successfully"
     })
 )
-
-module.exports = {
-    getUsers,
-    newUser
-}
