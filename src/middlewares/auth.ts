@@ -7,7 +7,9 @@ export const auth = (req: IncomingMessage, res: ServerResponse, next: NextFuncti
     if (!token) {
         return resJSON(res, 401, {
             success: false,
-            message: "Invalid Token"
+            message: "Invalid Token",
+            data: null,
+            timestamp: Date.now().toString()
         })
     }
 
