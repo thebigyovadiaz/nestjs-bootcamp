@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import type { Next } from '../types';
+import type { NextFunction } from '../types';
 
-export const logger = (req: IncomingMessage, res: ServerResponse, next: Next): void => {
+export const logger = (req: IncomingMessage, res: ServerResponse, next: NextFunction): void => {
     const start = Date.now()
 
     res.on("finish", () => {

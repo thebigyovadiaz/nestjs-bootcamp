@@ -5,10 +5,10 @@ export type Handler = (
   res: ServerResponse
 ) => void
 
-export type Next = () => void
+export type NextFunction = () => void
 
 export type Middleware = (
   req: IncomingMessage,
   res: ServerResponse,
-  next: Next
+  next: NextFunction
 ) => void
