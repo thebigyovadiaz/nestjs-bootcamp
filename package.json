@@ -9,7 +9,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app/server.js",
-    "dev": "tsx watch src/app/server.ts"
+    "dev": "tsx watch src/app/server.ts",
+    "rm-dist": "rm -rf dist"
   },
   "repository": {
     "type": "git",
