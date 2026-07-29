@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
-import type { Next } from '../types';
+import type { NextFunction } from '../types';
 
-export const auth = (req: IncomingMessage, res: ServerResponse, next: Next): void | ServerResponse => {
+export const auth = (req: IncomingMessage, res: ServerResponse, next: NextFunction): void => {
     const token = req.headers.authorization
     if (!token) {
         return resJSON(res, 401, {

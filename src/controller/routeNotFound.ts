@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
 
-export const routeNotFound = (req: IncomingMessage, res: ServerResponse) => (
+export const routeNotFound = (req: IncomingMessage, res: ServerResponse): void => (
     resJSON(res, 404, {
         success: false,
         message: "Route not found"
