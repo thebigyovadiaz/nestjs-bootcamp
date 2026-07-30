@@ -1,7 +1,8 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
+import { Request } from '../interfaces';
 
-export const home = (req: IncomingMessage, res: ServerResponse): void => {
+export const home = (req: Request, res: ServerResponse): void => {
     return resJSON(res, 200, {
         success: true,
         message: "Welcome to NestJs Bootcamp",
