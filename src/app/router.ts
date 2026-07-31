@@ -1,12 +1,22 @@
-import { IncomingMessage, ServerResponse } from 'http';
+import { ServerResponse, IncomingMessage } from 'http';
 import { routeNotFound } from '../controller/routeNotFound';
-import type { Handler, Middleware, NextFunction } from '../types';
+import type { Handler } from '../types';
+import { Request, RouteDetails } from '../interfaces';
+import { parseRequest, parseUrlPath } from '../utils/parseUrl';
+import { runMiddlewares } from '../middlewares/register';
+import { parseBody } from '../utils/parseBody';
+import { badRequest } from '../controller/badRequest';
+import { methodsWithBody } from '../utils/utilities';
 
 // Routes config
-const routes: Record<string, Handler> = {}
+const routes: RouteDetails[] = []
 
 const register = (method: string, path: string, handler: Handler) => {
-    routes[`${method}:${path}`] = handler
+    routes.push({
+        method,
+        path,
+        handler
+    })
 }
 
 export const get = (path: string, handler: Handler) => {
@@ -25,22 +35,63 @@ export const del = (path: string, handler: Handler) => {
     register("DELETE", path, handler)
 }
 
-// Middlewares config
-const middlewares: Middleware[] = []
-export const use = (middleware: Middleware) => {
-    middlewares.push(middleware)
-}
+export const resolve = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
+    const request = req as Request
+    request.params = {}
 
-export const resolve = (key: string, req: IncomingMessage, res: ServerResponse): void => {
-    const handler = routes[key]
-    if (!handler) return routeNotFound(req, res)
+    const {method, partsUrl, query} = parseRequest(request)
+    request.query = query
 
-    let index = 0
-    const next: NextFunction = () => {
-        const middleware: Middleware = middlewares[index++]
-        if (!middleware) return handler(req, res)
-        middleware(req, res, next)
+    for (const route of routes) {
+        // validar method
+        if (route.method !== method) {
+            continue
+        }
+
+        const routeParts = parseUrlPath(route.path)
+
+        // Equal segments length
+        if (routeParts.length !== partsUrl.length) {
+            continue
+        }
+
+        // Temporal params
+        const params: Record<string, string> = {}
+
+        let matched = true
+
+        // Compare segments by segments
+        for (let i = 0; i < routeParts.length; i++) {
+            const routeSegment = routeParts[i]
+            const requestSegment = partsUrl[i]
+
+            // If a params
+            if (routeSegment.startsWith(":")) {
+                const key = routeSegment.substring(1)
+                params[key] = requestSegment
+                continue
+            }
+
+            if (routeSegment !== requestSegment) {
+                matched = false
+                break
+            }
+        }
+
+        if (matched) {
+            request.params = params
+
+            if (methodsWithBody.has(method)) {
+                try {
+                    request.body = await parseBody(request)
+                } catch (error) {
+                    return badRequest(request, res)
+                }
+            }
+
+            return runMiddlewares(request, res, route.handler)
+        }
     }
 
-    next()
+    return routeNotFound(request, res)
 }
