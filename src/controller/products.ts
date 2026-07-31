@@ -23,7 +23,11 @@ export const getProducts = (req: Request, res: ServerResponse): void => {
     return resJSON(res, 200, {
         success: true,
         message: "Products fetched successfully",
-        data: products,
+        data: {
+            products,
+            query: req.query,
+            params: req.params
+        },
         timestamp: Date.now().toString()
     })
 }

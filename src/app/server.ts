@@ -1,11 +1,12 @@
 import http, { ServerResponse, IncomingMessage } from 'http';
-import { get, post, use, resolve } from './router';
+import { get, post, resolve } from './router';
 
 import { home } from '../controller/home'
 import { getProducts } from '../controller/products'
 import { getUser, getUsers, newUser } from '../controller/users'
 import { logger } from '../middlewares/logger'
 import { auth } from '../middlewares/auth'
+import { use } from '../middlewares/register';
 
 // Middleware Register
 use(logger)

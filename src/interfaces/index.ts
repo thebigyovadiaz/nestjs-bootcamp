@@ -33,4 +33,13 @@ export interface RouteDetails {
 
 export interface Request extends IncomingMessage {
   params: Record<string, string>
+  query: Record<string, string>
+  body: object
+}
+
+export interface ParseRequest {
+  method: string,
+  pathname: string,
+  partsUrl: string[],
+  query: Record<string, string>
 }

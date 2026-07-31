@@ -33,7 +33,7 @@ export const newUser = (req: Request, res: ServerResponse): void => {
     return resJSON(res, 201, {
         success: true,
         message: "User created successfully",
-        data: users,
+        data: req.body,
         timestamp: Date.now().toString()
     })
 }

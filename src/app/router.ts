@@ -1,8 +1,12 @@
 import { ServerResponse, IncomingMessage } from 'http';
 import { routeNotFound } from '../controller/routeNotFound';
-import type { Handler, Middleware, NextFunction } from '../types';
+import type { Handler } from '../types';
 import { Request, RouteDetails } from '../interfaces';
-import { parseUrlPath } from '../utils/parseUrl';
+import { parseRequest, parseUrlPath } from '../utils/parseUrl';
+import { runMiddlewares } from '../middlewares/register';
+import { parseBody } from '../utils/parseBody';
+import { badRequest } from '../controller/badRequest';
+import { methodsWithBody } from '../utils/utilities';
 
 // Routes config
 const routes: RouteDetails[] = []
@@ -31,30 +35,23 @@ export const del = (path: string, handler: Handler) => {
     register("DELETE", path, handler)
 }
 
-// Middlewares config
-const middlewares: Middleware[] = []
-export const use = (middleware: Middleware) => {
-    middlewares.push(middleware)
-}
-
-export const resolve = (req: IncomingMessage, res: ServerResponse): void => {
+export const resolve = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const request = req as Request
     request.params = {}
 
-    const url = new URL(req.url || "localhost", `http://${req.headers.host}`)
-
-    const requestParts = parseUrlPath(url.pathname)
+    const {method, partsUrl, query} = parseRequest(request)
+    request.query = query
 
     for (const route of routes) {
         // validar method
-        if (route.method !== req.method) {
+        if (route.method !== method) {
             continue
         }
 
         const routeParts = parseUrlPath(route.path)
 
         // Equal segments length
-        if (routeParts.length !== requestParts.length) {
+        if (routeParts.length !== partsUrl.length) {
             continue
         }
 
@@ -66,7 +63,7 @@ export const resolve = (req: IncomingMessage, res: ServerResponse): void => {
         // Compare segments by segments
         for (let i = 0; i < routeParts.length; i++) {
             const routeSegment = routeParts[i]
-            const requestSegment = requestParts[i]
+            const requestSegment = partsUrl[i]
 
             // If a params
             if (routeSegment.startsWith(":")) {
@@ -83,14 +80,16 @@ export const resolve = (req: IncomingMessage, res: ServerResponse): void => {
 
         if (matched) {
             request.params = params
-            let index = 0
-            const next: NextFunction = () => {
-                const middleware: Middleware = middlewares[index++]
-                if (!middleware) return route.handler(request, res)
-                middleware(request, res, next)
+
+            if (methodsWithBody.has(method)) {
+                try {
+                    request.body = await parseBody(request)
+                } catch (error) {
+                    return badRequest(request, res)
+                }
             }
 
-            return next()
+            return runMiddlewares(request, res, route.handler)
         }
     }
 
