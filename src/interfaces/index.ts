@@ -2,7 +2,7 @@ import { IncomingMessage } from 'http';
 import { Handler } from '../types/index';
 export interface User {
   name: string
-  id: string
+  id: number
   email: string
   createdAt: string
   updatedAt?: string

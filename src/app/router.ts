@@ -1,5 +1,5 @@
 import { ServerResponse, IncomingMessage } from 'http';
-import { routeNotFound } from '../controller/routeNotFound';
+import { resultNotFound } from '../controller/resultNotFound';
 import type { Handler } from '../types';
 import { Request, RouteDetails } from '../interfaces';
 import { parseRequest, parseUrlPath } from '../utils/parseUrl';
@@ -93,5 +93,5 @@ export const resolve = async (req: IncomingMessage, res: ServerResponse): Promis
         }
     }
 
-    return routeNotFound(request, res)
+    return resultNotFound(request, res, "Rout Not Found")
 }

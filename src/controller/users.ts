@@ -1,25 +1,13 @@
 import { ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
 import { Request, User } from '../interfaces';
+import { usersService } from '../services/users.service';
+import { usersRepository } from '../repositories/users.repository';
+import { resultNotFound } from './resultNotFound';
+import { CreateUserDto } from '../interfaces/dto';
 
 export const getUsers = (req: Request, res: ServerResponse): void => {
-    const users: User[] = [
-        {
-            name: "Peter Rose",
-            id: "1234",
-            email: "peterr@gmail.com",
-            createdAt: Date.now().toString(),
-            isActive: true
-        },
-        {
-            name: "Elena Petric",
-            id: "12345",
-            email: "petricelena@gmail.com",
-            createdAt: Date.now().toString(),
-            isActive: true
-        }
-    ]
-
+    const users = usersService.findAll()
     return resJSON(res, 200, {
         success: true,
         message: "Users fetched successfully",
@@ -39,27 +27,15 @@ export const newUser = (req: Request, res: ServerResponse): void => {
 }
 
 export const getUser = (req: Request, res: ServerResponse): void => {
-    const users: User[] = [
-        {
-            name: "Peter Rose",
-            id: "1234",
-            email: "peterr@gmail.com",
-            createdAt: Date.now().toString(),
-            isActive: true
-        },
-        {
-            name: "Elena Petric",
-            id: "12345",
-            email: "petricelena@gmail.com",
-            createdAt: Date.now().toString(),
-            isActive: true
-        }
-    ]
+    const user = usersService.findById(Number(req.params.id))
+    if (!user) {
+        return resultNotFound(req, res, "User Not Found")
+    }
 
     return resJSON(res, 200, {
         success: true,
         message: "Users fetched successfully",
-        data: req.params,
+        data: user,
         timestamp: Date.now().toString()
     })
 }
