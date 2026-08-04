@@ -1,45 +1,21 @@
 import { User } from "../interfaces";
-import { CreateUserDto } from "../interfaces/dto";
+import { CreateUserDto } from "../dto/create-user.dto";
 
 const users: User[] = [
     {
-        name: "User First",
         id: 1,
+        name: "User First",
         email: "test1@gmail.com",
-        createdAt: Date.now().toString(),
-        isActive: true
-    },
-    {
-        name: "User Second",
-        id: 2,
-        email: "test2@gmail.com",
-        createdAt: Date.now().toString(),
-        isActive: true
-    },
-    {
-        name: "User Third",
-        id: 3,
-        email: "test3@gmail.com",
-        createdAt: Date.now().toString(),
-        isActive: true
-    },
-    {
-        name: "User Fourth",
-        id: 4,
-        email: "test4@gmail.com",
-        createdAt: Date.now().toString(),
-        isActive: true
-    },
-    {
-        name: "User Fiveth",
-        id: 5,
-        email: "test5@gmail.com",
+        password: "123456",
         createdAt: Date.now().toString(),
         isActive: true
     }
 ]
 
 export const usersRepository = {
+    generateId(): number {
+        return users.length + 1
+    },
     findAll(): User[] {
         return users.map(user => ({ ...user }))
     },
@@ -49,17 +25,9 @@ export const usersRepository = {
     findByEmail(email: String): User | undefined {
         return users.find(res => (res.email === email))
     },
-    create(user: CreateUserDto): Number {
-        const id = users.length + 1
-        users.push({
-            name: user.name,
-            id,
-            email: user.email,
-            createdAt: Date.now().toString(),
-            isActive: true
-        })
-
-        return id
+    create(user: User): Boolean {
+        users.push(user)
+        return true
     },
     update(id: Number, data: Partial<User>): User | undefined {
         users.forEach((v, k) => {

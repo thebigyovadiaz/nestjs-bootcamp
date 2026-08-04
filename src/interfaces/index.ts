@@ -1,11 +1,11 @@
 import { IncomingMessage } from 'http';
 import { Handler } from '../types/index';
 export interface User {
-  name: string
   id: number
+  name: string
   email: string
+  password: string
   createdAt: string
-  updatedAt?: string
   isActive: boolean
 }
 
@@ -21,8 +21,8 @@ export interface Product {
 export interface ApiResponse<T> {
   success: boolean
   message: string
-  data: T
-  timestamp: string
+  data?: T
+  timestamp?: string
 }
 
 export interface RouteDetails {

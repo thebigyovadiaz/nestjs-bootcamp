@@ -2,9 +2,7 @@ import { ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
 import { Request, User } from '../interfaces';
 import { usersService } from '../services/users.service';
-import { usersRepository } from '../repositories/users.repository';
-import { resultNotFound } from './resultNotFound';
-import { CreateUserDto } from '../interfaces/dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 export const getUsers = (req: Request, res: ServerResponse): void => {
     const users = usersService.findAll()
@@ -17,20 +15,19 @@ export const getUsers = (req: Request, res: ServerResponse): void => {
 }
 
 export const newUser = (req: Request, res: ServerResponse): void => {
-    const users: User[] = []
+    const userData: CreateUserDto = req.body as CreateUserDto
+    const user = usersService.create(userData)
+
     return resJSON(res, 201, {
         success: true,
         message: "User created successfully",
-        data: req.body,
+        data: user,
         timestamp: Date.now().toString()
     })
 }
 
 export const getUser = (req: Request, res: ServerResponse): void => {
     const user = usersService.findById(Number(req.params.id))
-    if (!user) {
-        return resultNotFound(req, res, "User Not Found")
-    }
 
     return resJSON(res, 200, {
         success: true,
