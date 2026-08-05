@@ -1,11 +1,12 @@
 import { ServerResponse } from 'http';
 import { resJSON } from '../utils/response';
-import { Request, User } from '../interfaces';
+import { Request } from '../interfaces';
 import { usersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { DetailsUserDto } from '../dto/details-user.dto';
 
 export const getUsers = (req: Request, res: ServerResponse): void => {
-    const users = usersService.findAll()
+    const users: DetailsUserDto[] = usersService.findAll()
     return resJSON(res, 200, {
         success: true,
         message: "Users fetched successfully",

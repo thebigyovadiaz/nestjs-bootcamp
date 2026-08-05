@@ -1,3 +1,3 @@
 import { User } from "../interfaces";
 
-export type DetailsUserDto = Omit<User, "id" | "password">
+export type DetailsUserDto = Pick<User, "name" | "email" | "isActive" | "createdAt">

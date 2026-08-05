@@ -1,10 +1,13 @@
 import { User } from "../interfaces"
 import { CreateUserDto } from "../dto/create-user.dto"
-import { usersRepository } from "../repositories/users.repository"
+import { container } from "../repositories/memory/memory-user.repository"
 import { ValidationError } from "../errors/validation.error"
 import { NotFound } from "../errors/not-found.error"
 import { ConflictError } from "../errors/conflict.error"
 import { DetailsUserDto } from "../dto/details-user.dto"
+import { toDetailsUserDto } from "../dto/mappers/details-user.map"
+import { USER_REPOSITORY } from "../tokens/tokens"
+import { IUserRepository } from "../repositories/contracts/user.repository"
 
 const USER_RULES = {
   MIN_NAME_LENGTH: 5,
@@ -12,25 +15,27 @@ const USER_RULES = {
   MIN_EMAIL_LENGTH: 6
 }
 
+const repository = container.resolve<IUserRepository>(USER_REPOSITORY)
+
 export const usersService = {
-  findAll(): User[] {
-    return usersRepository.findAll()
+  findAll(): DetailsUserDto[] {
+    return repository.findAll().map(toDetailsUserDto)
   },
-  findById(id: number): User {
-    const user = usersRepository.findById(id)
+  findById(id: number): DetailsUserDto {
+    const user = repository.findById(id)
     if (!user) {
       throw new NotFound(`User with id ${id} not found`)
     }
 
     return user
   },
-  findByEmail(email: string): User {
-    const user = usersRepository.findByEmail(email)
+  findByEmail(email: string): DetailsUserDto {
+    const user = repository.findByEmail(email)
     if (!user) {
       throw new NotFound(`User with email ${email} not found`)
     }
 
-    return user
+    return toDetailsUserDto(user)
   },
   create(userData: CreateUserDto): DetailsUserDto {
     if (!userData.name || userData.name.length <= USER_RULES.MIN_NAME_LENGTH) {
@@ -52,13 +57,13 @@ export const usersService = {
       throw new ValidationError("Invalid Password")
     }
 
-    const userExists = usersRepository.findByEmail(userData.email)
+    const userExists = repository.findByEmail(userData.email)
     if (userExists) {
       throw new ConflictError(`User with email ${userData.email} already exists`)
     }
 
     const userDetails: User = {
-      id: usersRepository.generateId(),
+      id: repository.generateId(),
       name: userData.name,
       email: userData.email,
       password: userData.password,
@@ -66,16 +71,15 @@ export const usersService = {
       isActive: true
     }
 
-    const result = usersRepository.create(userDetails)
+    const result = repository.create(userDetails)
     if (!result) {
       throw new ConflictError("Failed to create user")
     }
 
-    const res: DetailsUserDto = userDetails as DetailsUserDto
-    return res
+    return toDetailsUserDto(userDetails)
   },
   update(id: number, data: Partial<User>): User {
-    const user = usersRepository.update(id, data)
+    const user = repository.update(id, data)
     if (!user) {
       throw new NotFound(`User with id ${id} not found`)
     }
@@ -83,6 +87,6 @@ export const usersService = {
     return user
   },
   delete(id: number): User[] {
-    return usersRepository.delete(id)
+    return repository.delete(id)
   }
 }
