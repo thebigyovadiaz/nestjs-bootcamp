@@ -1,12 +1,12 @@
 import { ServerResponse, IncomingMessage } from 'http';
-import { routeNotFound } from '../controller/routeNotFound';
 import type { Handler } from '../types';
 import { Request, RouteDetails } from '../interfaces';
 import { parseRequest, parseUrlPath } from '../utils/parseUrl';
-import { runMiddlewares } from '../middlewares/register';
 import { parseBody } from '../utils/parseBody';
-import { badRequest } from '../controller/badRequest';
 import { methodsWithBody } from '../utils/utilities';
+import { handleError } from '../utils/errorHandler';
+import { middlewares } from '../middlewares/middlewares';
+import { generalCtrl } from '../controller/general.controller';
 
 // Routes config
 const routes: RouteDetails[] = []
@@ -36,62 +36,66 @@ export const del = (path: string, handler: Handler) => {
 }
 
 export const resolve = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
-    const request = req as Request
-    request.params = {}
+    try {
+        const request = req as Request
+        request.params = {}
 
-    const {method, partsUrl, query} = parseRequest(request)
-    request.query = query
+        const {method, partsUrl, query} = parseRequest(request)
+        request.query = query
 
-    for (const route of routes) {
-        // validar method
-        if (route.method !== method) {
-            continue
-        }
-
-        const routeParts = parseUrlPath(route.path)
-
-        // Equal segments length
-        if (routeParts.length !== partsUrl.length) {
-            continue
-        }
-
-        // Temporal params
-        const params: Record<string, string> = {}
-
-        let matched = true
-
-        // Compare segments by segments
-        for (let i = 0; i < routeParts.length; i++) {
-            const routeSegment = routeParts[i]
-            const requestSegment = partsUrl[i]
-
-            // If a params
-            if (routeSegment.startsWith(":")) {
-                const key = routeSegment.substring(1)
-                params[key] = requestSegment
+        for (const route of routes) {
+            // validar method
+            if (route.method !== method) {
                 continue
             }
 
-            if (routeSegment !== requestSegment) {
-                matched = false
-                break
+            const routeParts = parseUrlPath(route.path)
+
+            // Equal segments length
+            if (routeParts.length !== partsUrl.length) {
+                continue
             }
-        }
 
-        if (matched) {
-            request.params = params
+            // Temporal params
+            const params: Record<string, string> = {}
 
-            if (methodsWithBody.has(method)) {
-                try {
-                    request.body = await parseBody(request)
-                } catch (error) {
-                    return badRequest(request, res)
+            let matched = true
+
+            // Compare segments by segments
+            for (let i = 0; i < routeParts.length; i++) {
+                const routeSegment = routeParts[i]
+                const requestSegment = partsUrl[i]
+
+                // If a params
+                if (routeSegment.startsWith(":")) {
+                    const key = routeSegment.substring(1)
+                    params[key] = requestSegment
+                    continue
+                }
+
+                if (routeSegment !== requestSegment) {
+                    matched = false
+                    break
                 }
             }
 
-            return runMiddlewares(request, res, route.handler)
-        }
-    }
+            if (matched) {
+                request.params = params
 
-    return routeNotFound(request, res)
+                if (methodsWithBody.has(method)) {
+                    try {
+                        request.body = await parseBody(request)
+                    } catch (error) {
+                        return generalCtrl.badRequest(request, res)
+                    }
+                }
+
+                return middlewares.runMiddlewares(request, res, route.handler)
+            }
+        }
+
+        return generalCtrl.resultNotFound(request, res, "Rout Not Found")
+    } catch (error) {
+        handleError(error, res)
+    }
 }
