@@ -1,13 +1,12 @@
 import { ServerResponse, IncomingMessage } from 'http';
-import { resultNotFound } from '../controller/resultNotFound';
 import type { Handler } from '../types';
 import { Request, RouteDetails } from '../interfaces';
 import { parseRequest, parseUrlPath } from '../utils/parseUrl';
-import { runMiddlewares } from '../middlewares/register';
 import { parseBody } from '../utils/parseBody';
-import { badRequest } from '../controller/badRequest';
 import { methodsWithBody } from '../utils/utilities';
 import { handleError } from '../utils/errorHandler';
+import { middlewares } from '../middlewares/middlewares';
+import { generalCtrl } from '../controller/general.controller';
 
 // Routes config
 const routes: RouteDetails[] = []
@@ -87,15 +86,15 @@ export const resolve = async (req: IncomingMessage, res: ServerResponse): Promis
                     try {
                         request.body = await parseBody(request)
                     } catch (error) {
-                        return badRequest(request, res)
+                        return generalCtrl.badRequest(request, res)
                     }
                 }
 
-                return runMiddlewares(request, res, route.handler)
+                return middlewares.runMiddlewares(request, res, route.handler)
             }
         }
 
-        return resultNotFound(request, res, "Rout Not Found")
+        return generalCtrl.resultNotFound(request, res, "Rout Not Found")
     } catch (error) {
         handleError(error, res)
     }
