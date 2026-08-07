@@ -4,7 +4,9 @@ import { Request } from '../interfaces';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { DetailsUserDto } from '../dto/details-user.dto';
+import { Controller } from '../decorators/controller.decorator';
 
+@Controller("/users")
 export class UserController {
     constructor(
         private readonly usersService: UsersService
