@@ -1,7 +1,9 @@
-import { container } from '../container/container';
+import { Container } from '../container/container';
 export class Application {
 
-  constructor() {}
+  constructor(
+    private readonly container: Container
+  ) {}
   bootstrap(): void {
     console.log('Application bootstrapping...');
   }

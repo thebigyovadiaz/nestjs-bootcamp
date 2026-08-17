@@ -1,16 +1,19 @@
 import { DependencyAlreadyRegisteredError, DependencyNotRegisteredError } from "../../errors/dependency.error"
 import { DependencyDefinition } from "../../interfaces"
 
-class Container {
-  private factories = new Map<symbol, () => unknown>();
-  private instances = new Map<symbol, unknown>();
+export class Container {
   private dependencies = new Map<symbol, DependencyDefinition>();
 
   register<T>(token: symbol, factory: () => T): void {
-    if (this.factories.has(token)) {
-      throw new DependencyAlreadyRegisteredError(`Dependency with token ${token.toString()} already registered`)
+    if (this.dependencies.has(token)) {
+      throw new DependencyAlreadyRegisteredError(
+        `Dependency with token ${token.toString()} already registered`
+      );
     }
-    this.factories.set(token, factory)
+
+    this.dependencies.set(token, {
+      token, factory
+    });
   }
 
   resolve<T>(token: symbol): T {
@@ -21,7 +24,7 @@ class Container {
       );
     }
 
-    if (!dependency.instance) {
+    if (dependency.instance === undefined) {
       dependency.instance = dependency.factory();
     }
 
