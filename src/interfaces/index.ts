@@ -43,3 +43,14 @@ export interface ParseRequest {
   partsUrl: string[],
   query: Record<string, string>
 }
+
+export interface ControllerDefinition {
+  target: Function
+  token: symbol
+}
+
+export interface DependencyDefinition<T = unknown> {
+  token: symbol;
+  factory: () => T;
+  instance?: T;
+}

@@ -1,5 +1,5 @@
-import { container } from "../container/container";
-import { USER_CONTROLLER } from "../container/tokens";
+import { container } from "../framework/container/container";
+import { USER_CONTROLLER } from "../framework/container/tokens";
 import { generalCtrl } from "../controller/general.controller";
 import { ProductsController } from "../controller/products.controller";
 import { UserController } from "../controller/users.controller";
@@ -8,7 +8,7 @@ import { use } from "../middlewares/register";
 import { get, post } from "./router";
 
 // Register factories in container
-import '../container/register'
+import '../framework/container/register'
 import { exploreControllers } from "../explorer/controller.registry";
 
 const usersController = container.resolve<UserController>(USER_CONTROLLER)

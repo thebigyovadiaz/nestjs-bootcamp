@@ -5,9 +5,9 @@ import { NotFound } from "../errors/not-found.error"
 import { ConflictError } from "../errors/conflict.error"
 import { DetailsUserDto } from "../dto/details-user.dto"
 import { toDetailsUserDto } from "../dto/mappers/details-user.map"
-import { USER_REPOSITORY } from "../container/tokens"
+import { USER_REPOSITORY } from "../framework/container/tokens"
 import { IUserRepository } from "../repositories/contracts/user.repository"
-import { container } from "../container/container"
+import { container } from "../framework/container/container"
 
 const USER_RULES = {
   MIN_NAME_LENGTH: 5,

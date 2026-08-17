@@ -1,5 +1,5 @@
 import { User } from "../../interfaces";
-import { USER_REPOSITORY } from "../../container/tokens";
+import { USER_REPOSITORY } from "../../framework/container/tokens";
 import { IUserRepository } from "../contracts/user.repository";
 
 export class MemoryUserRepository implements IUserRepository {

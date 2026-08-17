@@ -5,3 +5,9 @@ export class DependencyAlreadyRegisteredError extends AppError {
     super(500, message)
   }
 }
+
+export class DependencyNotRegisteredError extends AppError {
+  constructor(message: string) {
+    super(400, message)
+  }
+}
