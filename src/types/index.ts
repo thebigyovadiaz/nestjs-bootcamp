@@ -27,3 +27,8 @@ export type PublicProduct = Pick<
 
 // Readonly Types
 export type ImmutableUser = Readonly<User>
+
+export type ComponentType =
+  | "controller"
+  | "service"
+  | "repository";

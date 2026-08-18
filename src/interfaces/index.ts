@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http';
-import { Handler } from '../types/index';
+import { ComponentType, Handler } from '../types/index';
 export interface User {
   id: number
   name: string
@@ -53,4 +53,10 @@ export interface DependencyDefinition<T = unknown> {
   token: symbol;
   factory: () => T;
   instance?: T;
+}
+
+export interface ComponentDefinition {
+  target: Function
+  token: symbol
+  type: ComponentType
 }
