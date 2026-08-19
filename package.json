@@ -1,15 +1,15 @@
 {
   "name": "nestjs-bootcamp",
   "version": "1.0.0",
-  "description": "Building application with NestJs",
-  "main": "dist/app/server.js",
+  "description": "Building JS Framework with TypeScript",
+  "main": "dist/main.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app/server.js",
-    "dev": "tsx watch src/app/server.ts",
+    "start": "node dist/main.js",
+    "dev": "tsx watch src/main.ts",
     "rm-dist": "rm -rf dist"
   },
   "repository": {
@@ -24,5 +24,8 @@
     "@types/node": "^26.1.2",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2"
   }
 }
