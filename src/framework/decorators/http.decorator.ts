@@ -1,38 +1,27 @@
 import "reflect-metadata";
-
-export const ROUTE_METADATA = Symbol("ROUTE_METADATA");
-export const METHOD_METADATA = Symbol("METHOD_METADATA");
-
-export type HttpMethod =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "PATCH"
-  | "DELETE";
+import { HttpMethod } from "../../types";
+import { RouteDefinition } from "../../interfaces";
+import { ROUTES_METADATA } from "../metadata/metadata.keys";
 
 function createMethodDecorator(method: HttpMethod) {
-
   return (path = ""): MethodDecorator => {
+    return (target, propertyKey) => {
+      const existingRoutes: RouteDefinition[] =
+        Reflect.getMetadata(
+          ROUTES_METADATA,
+          target.constructor
+        ) ?? [];
 
-    return (target, propertyKey, descriptor) => {
-
-      // Validation
-      if (!descriptor || typeof descriptor.value !== "function") {
-        throw new Error(`@${method} only works on methods`);
-      }
-
-      Reflect.defineMetadata(
-        METHOD_METADATA,
+      existingRoutes.push({
         method,
-        target,
+        path,
         propertyKey
-      );
+      });
 
       Reflect.defineMetadata(
-        ROUTE_METADATA,
-        path,
-        target,
-        propertyKey
+        ROUTES_METADATA,
+        existingRoutes,
+        target.constructor
       );
     };
   };

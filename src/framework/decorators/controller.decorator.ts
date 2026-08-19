@@ -1,16 +1,17 @@
 import 'reflect-metadata'
-import { controllers } from '../../framework/container/container'
+import { CONTROLLER_METADATA } from '../metadata/metadata.keys'
+import { ControllerMetadata } from '../metadata/controller.metadata';
 
-export const CONTROLLER_PATH = Symbol("CONTROLLER_PATH");
-
-export function Controller(path: string): ClassDecorator {
+export function Controller(path = "") {
   return function(target: Function) {
+    const metadata: ControllerMetadata = {
+      path
+    }
+
     Reflect.defineMetadata(
-      CONTROLLER_PATH,
-      path,
+      CONTROLLER_METADATA,
+      metadata,
       target
     )
-
-    controllers.add(target)
   }
 }

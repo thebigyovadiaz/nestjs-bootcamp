@@ -4,8 +4,8 @@ import { Request } from '../interfaces';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { DetailsUserDto } from '../dto/details-user.dto';
-import { Controller } from '../decorators/controller.decorator';
-import { Get } from '../decorators/http.decorator';
+import { Controller } from '../framework/decorators/controller.decorator';
+import { Get } from '../framework/decorators/http.decorator';
 
 @Controller("/users")
 export class UserController {

@@ -32,3 +32,10 @@ export type ComponentType =
   | "controller"
   | "service"
   | "repository";
+
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "PATCH"
+  | "DELETE";

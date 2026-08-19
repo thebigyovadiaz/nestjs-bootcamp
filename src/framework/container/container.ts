@@ -35,5 +35,3 @@ export class Container {
     return [...this.dependencies.values()];
   }
 }
-
-export const container = new Container()

@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http';
-import { ComponentType, Handler } from '../types/index';
+import { ComponentType, Handler, HttpMethod } from '../types/index';
 export interface User {
   id: number
   name: string
@@ -59,4 +59,11 @@ export interface ComponentDefinition {
   target: Function
   token: symbol
   type: ComponentType
+}
+
+export interface RouteDefinition {
+  method: HttpMethod;
+  path: string;
+  propertyKey: string | symbol;
+  descriptor?: string;
 }

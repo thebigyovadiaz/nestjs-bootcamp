@@ -1,0 +1,2 @@
+export const CONTROLLER_METADATA = Symbol("CONTROLLER_METADATA")
+export const ROUTES_METADATA = Symbol("ROUTES_METADATA")

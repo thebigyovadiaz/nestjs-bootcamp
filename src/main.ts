@@ -1,7 +1,6 @@
 import { Application } from "./framework/application/application";
-import { container } from "./framework/container/container";
 
-const app = new Application(container)
+const app = new Application()
 
 app.bootstrap();
 app.listen(8080)
