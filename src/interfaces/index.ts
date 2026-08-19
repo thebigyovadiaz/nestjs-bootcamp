@@ -1,5 +1,5 @@
 import { IncomingMessage } from 'http';
-import { Handler } from '../types/index';
+import { ComponentType, Handler, HttpMethod } from '../types/index';
 export interface User {
   id: number
   name: string
@@ -42,4 +42,28 @@ export interface ParseRequest {
   pathname: string,
   partsUrl: string[],
   query: Record<string, string>
+}
+
+export interface ControllerDefinition {
+  target: Function
+  token: symbol
+}
+
+export interface DependencyDefinition<T = unknown> {
+  token: symbol;
+  factory: () => T;
+  instance?: T;
+}
+
+export interface ComponentDefinition {
+  target: Function
+  token: symbol
+  type: ComponentType
+}
+
+export interface RouteDefinition {
+  method: HttpMethod;
+  path: string;
+  propertyKey: string | symbol;
+  descriptor?: string;
 }
