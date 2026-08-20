@@ -1,4 +1,4 @@
-import { IncomingMessage } from 'http';
+import { IncomingMessage } from 'node:http';
 import { ComponentType, Handler, HttpMethod } from '../types/index.type';
 export interface User {
   id: number

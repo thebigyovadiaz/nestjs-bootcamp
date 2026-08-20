@@ -9,19 +9,12 @@ export function combinePaths(
     return "/";
   }
 
-  if (!controller) {
-    return normalizePath(route)
-  }
-
-  if (!route) {
-    return normalizePath(controller)
-  }
-
-  return normalizePath(`${controller}/${route}`)
+  const combined = `/${controller}/${route}`;
+  return normalizePath(combined)
 }
 
 function normalizePath(path: string): string {
-  const normalized = `/${path}`.replace(/\/+/g, "/");
+  const normalized = path.replace(/\/+/g, "/");
 
   if (normalized.length > 1 && normalized.endsWith("/")) {
     return normalized.slice(0, -1);

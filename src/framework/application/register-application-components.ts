@@ -1,22 +1,31 @@
-import { Container } from "./container";
+import { Container } from "../container/container";
+import { ComponentRegistry } from "../components/component-registry";
+
 import {
   USER_CONTROLLER,
   USER_REPOSITORY,
   USER_SERVICE
-} from "./tokens";
+} from "../container/tokens";
 
 import { MemoryUserRepository } from "../../repositories/memory/memory-user.repository";
 import { UsersService } from "../../services/users.service";
 import { IUserRepository } from "../../repositories/contracts/user.repository";
 import { UserController } from "../../controller/users.controller";
 
-export function registerDependencies(
-  container: Container
+export function registerApplicationComponents(
+  container: Container,
+  registry: ComponentRegistry
 ): void {
 
   container.register(
     USER_REPOSITORY,
     () => new MemoryUserRepository()
+  );
+
+  registry.register(
+    USER_REPOSITORY,
+    MemoryUserRepository,
+    "repository"
   );
 
   container.register(
@@ -28,6 +37,12 @@ export function registerDependencies(
     )
   );
 
+  registry.register(
+    USER_SERVICE,
+    UsersService,
+    "service"
+  );
+
   container.register(
     USER_CONTROLLER,
     () => new UserController(
@@ -35,5 +50,11 @@ export function registerDependencies(
         USER_SERVICE
       )
     )
+  );
+
+  registry.register(
+    USER_CONTROLLER,
+    UserController,
+    "controller"
   );
 }

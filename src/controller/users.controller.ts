@@ -5,7 +5,7 @@ import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { DetailsUserDto } from '../dto/details-user.dto';
 import { Controller } from '../framework/decorators/controller.decorator';
-import { Get } from '../framework/decorators/http.decorator';
+import { Get, Post } from '../framework/decorators/http.decorator';
 
 @Controller("/users")
 export class UserController {
@@ -15,6 +15,7 @@ export class UserController {
 
     @Get("/")
     getUsers(req: Request, res: ServerResponse): void {
+        console.log('controller');
         const users: DetailsUserDto[] = this.usersService.findAll()
         return resJSON(res, 200, {
             success: true,
@@ -24,6 +25,7 @@ export class UserController {
         })
     }
 
+    @Post("/new-user")
     newUser(req: Request, res: ServerResponse): void {
         const userData: CreateUserDto = req.body as CreateUserDto
         const user = this.usersService.create(userData)
