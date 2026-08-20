@@ -1,18 +1,18 @@
-import { ServerResponse } from "http"
+import { ServerResponse } from "node:http"
 import { Product, Request, User } from "../interfaces"
 
 export type Handler = (
   req: Request,
   res: ServerResponse
-) => void
+) => void;
 
-export type NextFunction = () => void
+export type NextFunction = () => void;
 
 export type Middleware = (
   req: Request,
   res: ServerResponse,
   next: NextFunction
-) => void
+) => void;
 
 // Public Types
 export type PublicUser = Pick<
@@ -39,3 +39,5 @@ export type HttpMethod =
   | "PUT"
   | "PATCH"
   | "DELETE";
+
+export type ControllerInstance = Record<string | symbol, unknown>;

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { HttpMethod } from "../../types";
+import { HttpMethod } from "../../types/index.type";
 import { RouteDefinition } from "../../interfaces";
 import { ROUTES_METADATA } from "../metadata/metadata.keys";
 

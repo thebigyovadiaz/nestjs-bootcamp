@@ -1,6 +1,6 @@
 import { ComponentAlreadyRegisteredError } from "../../errors/components.error";
 import { ComponentDefinition } from "../../interfaces";
-import { ComponentType } from "../../types";
+import { ComponentType } from "../../types/index.type";
 
 export class ComponentRegistry {
   private components = new Map<symbol, ComponentDefinition>();

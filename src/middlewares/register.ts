@@ -1,6 +1,6 @@
 import { ServerResponse } from "http"
 import { Request } from "../interfaces"
-import { Handler, Middleware, NextFunction } from "../types"
+import { Handler, Middleware, NextFunction } from "../types/index.type"
 
 // Middlewares config
 const middlewares: Middleware[] = []

@@ -1,5 +1,5 @@
 import { ServerResponse } from 'http';
-import { resJSON } from '../utils/response';
+import { resJSON } from '../utils/response.util';
 import { Request } from '../interfaces';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
