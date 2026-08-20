@@ -1,5 +1,5 @@
 import { ServerResponse } from 'http';
-import { resJSON } from '../utils/response';
+import { resJSON } from '../utils/response.util';
 import { Product, Request } from '../interfaces';
 
 export const getProducts = (req: Request, res: ServerResponse): void => {

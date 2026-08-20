@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { resJSON } from '../utils/response';
-import type { Handler, Middleware, NextFunction } from '../types';
+import { resJSON } from '../utils/response.util';
+import type { Handler, Middleware, NextFunction } from '../types/index.type';
 import { Request } from '../interfaces';
 
 class Middlewares {
