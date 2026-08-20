@@ -1,5 +1,5 @@
-import { IncomingMessage } from 'http';
-import { ComponentType, Handler, HttpMethod } from '../types/index';
+import { IncomingMessage } from 'node:http';
+import { ComponentType, Handler, HttpMethod } from '../types/index.type';
 export interface User {
   id: number
   name: string
@@ -66,4 +66,10 @@ export interface RouteDefinition {
   path: string;
   propertyKey: string | symbol;
   descriptor?: string;
+}
+
+export interface ExploredRoute {
+  method: HttpMethod;
+  path: string;
+  handler: Handler;
 }

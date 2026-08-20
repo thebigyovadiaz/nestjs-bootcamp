@@ -1,17 +1,17 @@
 import { ServerResponse, IncomingMessage } from 'http';
-import type { Handler } from '../types';
-import { Request, RouteDetails } from '../interfaces';
-import { parseRequest, parseUrlPath } from '../utils/parseUrl';
-import { parseBody } from '../utils/parseBody';
-import { methodsWithBody } from '../utils/utilities';
-import { handleError } from '../utils/errorHandler';
-import { middlewares } from '../middlewares/middlewares';
-import { generalCtrl } from '../controller/general.controller';
+import type { Handler, HttpMethod } from '../../types/index.type';
+import { Request, RouteDetails } from '../../interfaces';
+import { parseRequest, parseUrlPath } from '../../utils/parse-url.util';
+import { parseBody } from '../../utils/parse-body.util';
+import { methodsWithBody } from '../../utils/utilities.util';
+import { handleError } from '../../utils/error-handler.util';
+import { runMiddlewares } from '../../middlewares/register';
+import { generalCtrl } from '../../controller/general.controller';
 
 // Routes config
 const routes: RouteDetails[] = []
 
-const register = (method: string, path: string, handler: Handler) => {
+export const register = (method: HttpMethod, path: string, handler: Handler) => {
     routes.push({
         method,
         path,
@@ -90,7 +90,7 @@ export const resolve = async (req: IncomingMessage, res: ServerResponse): Promis
                     }
                 }
 
-                return middlewares.runMiddlewares(request, res, route.handler)
+                return runMiddlewares(request, res, route.handler)
             }
         }
 

@@ -15,6 +15,9 @@
 
     "esModuleInterop": true,
 
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

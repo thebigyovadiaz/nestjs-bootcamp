@@ -1,5 +1,5 @@
 import { ComponentDefinition } from '../../interfaces';
-import { ComponentType } from '../../types';
+import { ComponentType } from '../../types/index.type';
 import { ComponentRegistry } from '../components/component-registry';
 import { Container } from '../container/container';
 
@@ -13,7 +13,7 @@ export class ApplicationContext {
     return this.container.resolve<T>(token);
   }
 
-  getComponentByType(type: ComponentType): ComponentDefinition[] {
+  getComponentsByType(type: ComponentType): ComponentDefinition[] {
     return this.componentRegistry.getByType(type);
   }
 }

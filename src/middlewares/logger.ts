@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import type { NextFunction } from '../types';
+import type { NextFunction } from '../types/index.type';
 
 export const logger = (req: IncomingMessage, res: ServerResponse, next: NextFunction): void => {
     const start = Date.now()

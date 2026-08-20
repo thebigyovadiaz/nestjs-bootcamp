@@ -1,5 +1,5 @@
 import { ServerResponse } from 'http';
-import { resJSON } from '../utils/response';
+import { resJSON } from '../utils/response.util';
 import { Request } from '../interfaces';
 
 class GeneralController {
